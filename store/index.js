@@ -28,6 +28,17 @@ const createStore = () => {
         const { articles } = await this.$axios.$get(apiUrl);
         commit('setLoading', false);
         commit('setHeadlines', articles);
+      },
+      async authenticateUser({ commit }, UserPayload) {
+        try {
+          commit('setLoading', true);
+          const authUserData = await this.$axios.$post('/resister/', UserPayload);
+          console.log(authUserData);
+          commit('setLoading', false);
+        } catch (err) {
+          console.error(err);
+          commit('setLoading', false);
+        }
       }
     },
     getters: {
