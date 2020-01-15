@@ -1,5 +1,39 @@
 <template>
-  <div class="md-layout md-alignment-center">
+  <div class="md-layout md-alignment-center" style="margin: 4em 0">
+    <!-- Top Navigation -->
+    <md-toolbar class="fixed-toolbar" elevation="1">
+      <md-button class="md-icon-button">
+        <md-icon>menu</md-icon>
+      </md-button>
+      <nuxt-link class="md-primary md-title" to="/">
+        NuxtNews
+      </nuxt-link>
+
+      <div class="md-toolbar-section-end">
+        <md-button to="/login">ログイン</md-button>
+        <md-button to="/resister">登録</md-button>
+        <md-button class="md-accent" @click="showSidepanel = true">カテゴリ</md-button>
+      </div>
+    </md-toolbar>
+
+    <!-- News Categories (Right Drawn) -->
+    <md-drawer class="md-right" md-fixed :md-active.sync="showSidepanel">
+      <md-toolbar :md-elecation="1">
+        <span class="md-title">ニュースカテゴリ</span>
+      </md-toolbar>
+
+      <md-progress-bar v-if="loading" md-mode="indeterminate"></md-progress-bar>
+
+      <md-list>
+        <md-subheader class="md-primary">カテゴリ一覧</md-subheader>
+        <md-list-item v-for="(newsCategory, i) in newsCategories" :key="i"
+        @click="loadCategory(newsCategory.path)">
+          <md-icon :class="newsCategory.path === category ? 'md-primary' : ''">{{newsCategory.icon}}
+          </md-icon>
+          <span class="md-list-item-text">{{newsCategory.name}}</span>
+        </md-list-item>
+      </md-list>
+    </md-drawer>
     <!-- App Content -->
     <div class="md-layout-item md-size-95">
       <md-content class="md-layout md-gutter" style="background: #007998; padding: 1em;">
@@ -48,9 +82,36 @@
 
 <script>
   export default {
-    async asyncData({ app }){
-      const topHeadlines = await app.$axios.$get('api/top-headlines?country=jp');
-      return { headlines: topHeadlines.articles }
+    data: () => ({
+      showSidepanel: false,
+      newsCategories: [
+        { name: 'トップニュース', path: '', icon: 'today' },
+        { name: 'テクノロジー', path: 'technology', icon: 'keyboard' },
+        { name: 'ビジネス', path: 'business', icon: 'business_center' },
+        { name: 'エンターテイメント', path: 'entertainment', icon: 'weekend' },
+        { name: 'サイエンス', path: 'science', icon: 'fingerprint' },
+        { name: 'スポーツ', path: 'sports', icon: 'golf_course' }
+      ]
+    }),
+    async fetch({ store }) {
+      await store.dispatch('loadHeadlines', `/api/top-headlines?country=jp&category=${store.state.category}`);
+    },
+    computed: {
+      headlines() {
+        return this.$store.getters.headlines;
+      },
+      category() {
+        return this.$store.getters.category;
+      },
+      loading() {
+        return this.$store.getters.loading;
+      }
+    },
+    methods: {
+      async loadCategory(category) {
+        this.$store.commit('setCategory', category);
+        await this.$store.dispatch('loadHeadlines', `/api/top-headlines?country=jp&category=${this.category}`);
+      }
     }
   }
 </script>
@@ -58,5 +119,11 @@
 <style scoped>
   .small-icon {
     font-size: 18px !important;
+  }
+
+  .fixed-toolbar {
+    position: fixed;
+    top: 0;
+    z-index: 5;
   }
 </style>
