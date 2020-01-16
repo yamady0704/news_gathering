@@ -11,7 +11,7 @@
 
       <div class="md-toolbar-section-end">
         <md-button to="/login">ログイン</md-button>
-        <md-button to="/resister">ユーザー登録</md-button>
+        <md-button to="/register">ユーザー登録</md-button>
         <md-button class="md-accent" @click="showRightSidepanel = true">カテゴリ</md-button>
       </div>
     </md-toolbar>
