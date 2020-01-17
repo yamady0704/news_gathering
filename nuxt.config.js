@@ -2,7 +2,9 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'spa',
-
+  router: {
+    middleware: 'check-auth'
+  },
   /*
   ** Headers of the page
   */
@@ -65,6 +67,10 @@ module.exports = {
     "/register/": {
       target: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBCSLa8t2fplYRYcthG_U0LvViwSYPoe84",
       pathRewrite: { "^/register/": "" }
+    },
+    "/login/": {
+      target: "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBCSLa8t2fplYRYcthG_U0LvViwSYPoe84",
+      pathRewrite: { "^/login/": ""}
     }
   },
 

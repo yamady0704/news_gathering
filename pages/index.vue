@@ -6,7 +6,7 @@
         <md-icon>menu</md-icon>
       </md-button>
       <nuxt-link class="md-primary md-title" to="/">
-        NuxtNews
+        News Gathering
       </nuxt-link>
 
       <div class="md-toolbar-section-end">
@@ -15,7 +15,7 @@
             <md-avatar><img :src="user.avatar" :alt="user.email"></md-avatar>
             {{user.email}}
           </md-button>
-          <md-button>ログアウト</md-button>
+          <md-button @click="logoutUser">ログアウト</md-button>
         </template>
         <template v-else>
         <md-button to="/login">ログイン</md-button>
@@ -28,13 +28,13 @@
     <!-- Personal News Feed (Left Drawer) -->
     <md-drawer md-fixed :md-active.sync="showLeftSidepanel">
       <md-toolbar md-elevation="1">
-        <span class="md-title">Personal Feed</span>
+        <span class="md-title">パーソナルメニュー</span>
       </md-toolbar>
 
       <md-progress-bar v-if="loading" md-mode="indeterminate"></md-progress-bar>
 
       <md-field>
-        <label for="country">Country</label>
+        <label for="country">国を選択</label>
         <md-select @input="changeCountry" :value="country" name="country" id="country">
           <md-option value="jp">Japan</md-option>
           <md-option value="us">United States</md-option>
@@ -158,6 +158,9 @@
       },
       changeCountry(country) {
         this.$store.commit('setCountry', country);
+      },
+      logoutUser() {
+        this.$store.dispatch("logoutUser");
       }
     }
   }
