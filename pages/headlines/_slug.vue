@@ -15,7 +15,7 @@
             {{headline.source.name}}
             <md-icon>book</md-icon>
           </div>
-          <span class="md-subhead">
+          <span class="md-subhead" v-if="headline.author">
             {{headline.author}}
             <md-icon>face</md-icon>
           </span>
@@ -27,10 +27,10 @@
       <form @submit.prevent="sendComment">
         <md-field>
           <label>コメントを入力してください</label>
-          <md-textarea v-model="text" :disabled="leadong || !user"></md-textarea>
+          <md-textarea v-model="text" :disabled="loading || !user"></md-textarea>
           <md-icon>description</md-icon>
         </md-field>
-        <md-button class="md-primary md-raised" type="submit" :disabled="leadong || !user">コメントを投稿する</md-button>
+        <md-button class="md-primary md-raised" type="submit" :disabled="loading || !user">コメントを投稿する</md-button>
       </form>
 
       <md-list class="md-triple-line" styple="margin-top: 1em">
@@ -43,7 +43,7 @@
           </div>
 
           <md-badge class="md-primary" md-position="bottom" :md-content="comment.likes" />
-          <md-button class="md-icon-button" :disabled="leading || !user">
+          <md-button @click="likeComment(comment.id)" class="md-icon-button" :disabled="loading || !user">
             <md-icon>thumb_up</md-icon>
           </md-button>
         </md-list-item>
@@ -88,6 +88,9 @@
         };
         await this.$store.dispatch('sendComment', comment);
         this.text = '';
+      },
+      async likeComment(commentId) {
+        await this.$store.dispatch('likeComment', commentId);
       },
       getCommentUserData() {
         const commentUserData = { ...this.user };
