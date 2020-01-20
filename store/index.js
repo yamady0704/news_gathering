@@ -14,7 +14,8 @@ const createStore = () => {
       token: '',
       user: null,
       category: "",
-      country: "jp"
+      country: "jp",
+      source: ''
     },
     mutations: {
       setHeadlines(state, headlines) {
@@ -37,6 +38,9 @@ const createStore = () => {
       },
       setCountry(state, country) {
         state.country = country;
+      },
+      setSource(state, source) {
+        state.source = source;
       },
       setFeed(state, headlines) {
         state.feed = headlines;
@@ -223,9 +227,10 @@ const createStore = () => {
       isAuthenticated: state => !!state.token,
       user: state => state.user,
       category: state => state.category,
-      country: state => state.country
+      country: state => state.country,
+      source: state => state.source
     }
-  })
+  });
 }
 
 export default createStore;
