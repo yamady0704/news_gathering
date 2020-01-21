@@ -21,9 +21,37 @@
           <md-button to="/login">ログイン</md-button>
           <md-button to="/register">ユーザー登録</md-button>
         </template>
+        <md-button class="md-primary" @click="showSearchDialog = true">記事検索</md-button>
         <md-button class="md-accent" @click="showRightSidepanel = true">カテゴリ</md-button>
       </div>
     </md-toolbar>
+
+    <!-- Search Dialog -->
+    <md-dialog :md-active.sync="showSearchDialog">
+      <md-dialog-title>記事を探す</md-dialog-title>
+
+      <div class="md-layout" style="padding: 1em">
+        <md-field>
+          <label>検索キーワード</label>
+          <md-input v-model="query" placeholder="User quptes for exact matchs, And / OR / NOT for multiple terms" maxlength="30"></md-input>
+        </md-field>
+        <md-datepicker v-model="fromDate" md-immediately><label>開始日 (任意)</label></md-datepicker>
+        <md-datepicker v-model="toDate" md-immediately><label>終了日 (任意)</label></md-datepicker>
+        <md-field>
+          <label for="sortBy">並び順 (任意)</label>
+          <md-select v-model="sortBy" id="sortBy" md-dence>
+            <md-option value="publishedAt">新しい順 (デフォルト)</md-option>
+            <md-option value="relevancy">関連性</md-option>
+            <md-option value="popularity">人気度</md-option>
+          </md-select>
+        </md-field>
+      </div>
+
+      <md-dialog-actions>
+        <md-button class="md-accent" @click="showSearchDialog = false">キャンセル</md-button>
+        <md-button class="md-primary" @click="searchHeadlines">検索</md-button>
+      </md-dialog-actions>
+    </md-dialog>
 
     <!-- Personal News Feed (Left Drawer) -->
     <md-drawer md-fixed :md-active.sync="showLeftSidepanel">
@@ -140,6 +168,7 @@
     data: () => ({
       showRightSidepanel: false,
       showLeftSidepanel: false,
+      showSearchDialog: false,
       newsCategories: [
         { name: 'トップニュース', path: '', icon: 'today' },
         { name: 'テクノロジー', path: 'technology', icon: 'keyboard' },
@@ -147,7 +176,11 @@
         { name: 'エンターテイメント', path: 'entertainment', icon: 'weekend' },
         { name: 'サイエンス', path: 'science', icon: 'fingerprint' },
         { name: 'スポーツ', path: 'sports', icon: 'golf_course' }
-      ]
+      ],
+      query: "",
+      fromDate: '',
+      toDate: '',
+      sortBy: ''
     }),
     async fetch({ store }) {
       await store.dispatch('loadHeadlines', `/api/top-headlines?country=${store.state.country}&category=${store.state.category}`);
@@ -198,6 +231,14 @@
       changeCountry(country) {
         this.$store.commit('setCountry', country);
       },
+      async searchHeadlines() {
+        if (this.query) {
+          await this.$store.dispatch('loadHeadlines', `/api/everything?q=${this.query}&from=${this.dateToISOString(this.fromDate)}&to=${this.dateToISOString(this.toDate)}&sortBy=${this.sortBy}`);
+          this.showSearchDialog = false;
+        } else {
+          alert("キーワードを入力してください")
+        }
+      },
       async addHeadlineToFeed(headline) {
         if (this.user) {
           await this.$store.dispatch('addHeadlineToFeed', headline);
@@ -217,6 +258,11 @@
       isInFeed(title) {
         const inFeed = this.feed.findIndex(headline => headline.title === title) > -1;
         return inFeed ? 'md-primary' : '';
+      },
+      dateToISOString(date) {
+        if (date) {
+          return new Date(date).toISOString();
+        }
       }
     }
   }

@@ -56,7 +56,7 @@ const createStore = () => {
         const headlines = articles.map(article => {
           const slug = slugify(article.title, {
             replacement: '-',
-            remove: /[~a-zA-Z0-9 -]/g,
+            remove: /[^a-zA-Z0-9 -]/g,
             lower: true
           });
           const headline = { ...article, slug };
