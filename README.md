@@ -1,4 +1,7 @@
-# nuxt-news
+# News Gathering
+
+## production URL
+[News Gathering](https://news-gathering.herokuapp.com/)
 
 > A news application built with Nuxt 2 and Firestore
 
