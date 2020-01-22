@@ -31,7 +31,7 @@
       </form>
 
       <md-snackbar :md-active.sync="isAuthenticated">
-        {{form.email}}は正常に登録できました。
+        ユーザー名「{{form.email}}」で登録完了しました。
       </md-snackbar>
     </md-card>
 

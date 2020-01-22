@@ -31,7 +31,7 @@
       </form>
 
       <md-snackbar :md-active.sync="isAuthenticated">
-        {{form.email}}は正常にログインできました。
+        ユーザー名「{{form.email}}」でログインしました。
       </md-snackbar>
     </md-card>
 
