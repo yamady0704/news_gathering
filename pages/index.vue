@@ -33,7 +33,7 @@
       <div class="md-layout" style="padding: 1em">
         <md-field>
           <label>検索キーワード</label>
-          <md-input v-model="query" placeholder="User quptes for exact matchs, And / OR / NOT for multiple terms" maxlength="30"></md-input>
+          <md-input v-model="query" placeholder="キーワードを入力してください。（条件にAND, OR,  NOTが使用できます。）" maxlength="30"></md-input>
         </md-field>
         <md-datepicker v-model="fromDate" md-immediately><label>開始日 (任意)</label></md-datepicker>
         <md-datepicker v-model="toDate" md-immediately><label>終了日 (任意)</label></md-datepicker>
@@ -87,9 +87,9 @@
         <md-list-item>
           <md-avatar><img :src="headline.urlToImage" :alt="headline.title"></md-avatar>
           <div class="md-list-item-text">
-            <span><a href="headline.url" target="_blank">{{headline.title}}</a></span>
+            <span><a :href="headline.url" target="_blank">{{headline.title}}</a></span>
             <span>{{headline.source.name}}</span>
-            <span>View Comments</span>
+            <span @click="saveHeadline(headline)">記事のコメントを見る</span>
           </div>
 
           <md-button @click="removeHeadlineFromFeed(headline)" class="md-icon-button md-list-action">
@@ -141,7 +141,7 @@
                     <md-icon class="small-icon">face</md-icon>
                   </div>
                   <div class="md-subhead">
-                    {{headline.publishedAt}}
+                    {{headline.publishedAt | publishedTimeToNow }}
                     <md-icon class="small-icon">alarm</md-icon>
                   </div>
                 </md-card-header>
@@ -164,6 +164,7 @@
 </template>
 
 <script>
+  import required from 'vuelidate/lib/validators';
   export default {
     data: () => ({
       showRightSidepanel: false,
