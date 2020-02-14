@@ -5,6 +5,9 @@ module.exports = {
   router: {
     middleware: 'check-auth'
   },
+  generate: {
+    fallback: true
+  },
   /*
   ** Headers of the page
   */
