@@ -11,3 +11,11 @@
   status = 200
   force = true
   headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/login"
+  to = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBCSLa8t2fplYRYcthG_U0LvViwSYPoe84"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
