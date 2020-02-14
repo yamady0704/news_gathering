@@ -1,0 +1,2 @@
+/api/* https://newsapi.org/v2/:splat 301!
+/resister/* https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBCSLa8t2fplYRYcthG_U0LvViwSYPoe84/:splat 301!
