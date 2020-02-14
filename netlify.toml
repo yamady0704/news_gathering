@@ -4,3 +4,10 @@
   status = 301!
   force = true
   headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/register"
+  to = https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBCSLa8t2fplYRYcthG_U0LvViwSYPoe84
+  status = 301!
+  force = true
+  headers = {X-From = "Netlify"}
